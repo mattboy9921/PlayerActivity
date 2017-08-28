@@ -1,6 +1,6 @@
-name: PlayerActivity
-version: @VERSION@
-description: Idle player management
+name: ${project.artifactId}
+version: ${project.version}
+description: ${project.description}
 author: EdGruberman (ed@rjump.com)
 website: http://dev.bukkit.org/server-mods/playeractivity/
 main: edgruberman.bukkit.playeractivity.Main
