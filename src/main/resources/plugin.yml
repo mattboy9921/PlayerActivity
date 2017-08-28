@@ -1,0 +1,89 @@
+name: ${project.artifactId}
+version: ${project.version}
+description: ${project.description}
+author: EdGruberman (ed@rjump.com)
+website: http://dev.bukkit.org/server-mods/playeractivity/
+main: edgruberman.bukkit.playeractivity.Main
+commands:
+  'away':
+    aliases: [afk]
+    description: Configure your status as not active
+    permission: playeractivity.away
+    usage: '§f-> §7Usage: §b/<command> §3[§oreason§3]'
+  'back':
+    description: Configure your status as active
+    permission: playeractivity.back
+    usage: '§f-> §7Usage: §b/<command>'
+  'toggle':
+    description: Toggle your away status
+    permission: playeractivity.toggle
+    usage: '§f-> §7Usage: §b/<command> §3[§oreason§3]'
+  'who':
+    aliases: [whois]
+    description: View activity status of player
+    permission: playeractivity.who
+    usage: '§f-> §7Usage: §b/<command> §3§oplayer'
+  'players':
+    description: View list of connected players
+    permission: playeractivity.players
+    usage: '§f-> §7Usage: §b/<command>'
+  'playeractivity.reload':
+    description: Reload PlayerActivity plugin
+    permission: playeractivity.reload
+    usage: '§f-> §7Usage: §b/<command>'
+permissions:
+  playeractivity.admin:
+    description: Can use all features of PlayerActivity plugin
+    default: op
+    children:
+      playeractivity.user: true
+      playeractivity.reload: true
+  playeractivity.user:
+    description: Can use basic features of PlayerActivity plugin
+    default: true
+    children:
+      playeractivity.track: true
+      playeractivity.away: true
+      playeractivity.back: true
+      playeractivity.toggle: true
+      playeractivity.who: true
+      playeractivity.players: true
+  playeractivity.track:
+    description: Activity is tracked
+    default: false
+    children:
+      playeractivity.track.who: true
+      playeractivity.track.players: true
+      playeractivity.track.idlenotify: true
+      playeractivity.track.idlekick: true
+      playeractivity.track.listtag: true
+  playeractivity.track.players:
+    description: Listed in players command results
+    default: false
+  playeractivity.track.who:
+    description: Details provided in who command results
+    default: false
+  playeractivity.track.idlenotify:
+    description: Notify if player goes idle
+    default: false
+  playeractivity.track.idlekick:
+    description: Kick if player goes idle
+    default: false
+  playeractivity.track.listtag:
+    description: Apply tags to name in player list
+    default: false
+  playeractivity.away:
+    description: Can use away command
+    default: false
+  playeractivity.back:
+    description: Can use back command
+    default: false
+  playeractivity.toggle:
+    description: Can use toggle command
+    default: false
+  playeractivity.who:
+    description: Can use who command
+    default: false
+  playeractivity.reload:
+    description: Can use reload command
+    default: false

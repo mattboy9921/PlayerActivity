@@ -1,0 +1,42 @@
+log-level: INFO
+activity:
+  - PlayerMoveBlockEvent
+  - AsyncPlayerChatEvent
+  - PlayerInteractEvent
+  - PlayerDropItemEvent
+  - PlayerToggleSneakEvent
+  - PlayerItemHeldEvent
+  - PlayerJoinEvent
+  - PlayerChangedWorldEvent
+  - CraftItemEvent
+  - PrepareItemCraftEvent
+  - EnchantItemEvent
+  - PrepareItemEnchantEvent
+  - InventoryClickEvent
+  - PlayerBack
+idle-notify:
+  enabled: true
+  idle: 600 # threshold when to notify (seconds)
+  cancel-when-away: true
+idle-kick:
+  enabled: false
+  idle: 1200 # threshold when to kick (seconds)
+list-tag:
+  enabled: true
+  tags:
+    Away:
+      priority: 1
+    Idle:
+      priority: 2
+      idle: 60 # threshold when to apply idle tag (seconds)
+    Bed:
+      priority: 3
+away-back:
+  enabled: true
+  mentions: true
+  activity:
+    - AsyncPlayerChatEvent
+    - PlayerBedEnterEvent
+    - PlayerManualBedLeaveEvent
+    - PlayerBack
+version: @VERSION@
