@@ -15,7 +15,7 @@ import edgruberman.bukkit.playeractivity.Main;
 
 public abstract class Tag implements Comparable<Tag> {
 
-    private static final int LIST_NAME_LENGTH = 16;
+    //private static final int LIST_NAME_LENGTH = 16;
     private static final String TAGS_PACKAGE = Tag.class.getPackage().getName() + ".tags";
 
     public static Tag create(final String className, final ConfigurationSection config, final ListTag listTag, final Plugin plugin)
@@ -27,7 +27,7 @@ public abstract class Tag implements Comparable<Tag> {
                 .newInstance(config, listTag, plugin);
     }
 
-    public static Class<? extends Tag> find(final String className) throws ClassNotFoundException, ClassCastException {
+    private static Class<? extends Tag> find(final String className) throws ClassNotFoundException, ClassCastException {
         try {
             return Class.forName(Tag.TAGS_PACKAGE + "." + className).asSubclass(Tag.class);
         } catch (final Exception e) {
@@ -39,13 +39,13 @@ public abstract class Tag implements Comparable<Tag> {
 
     // ---- instance ----
 
-    protected final String pattern;
-    protected final int length;
-    protected final String description;
-    protected final Integer priority;
-    protected final ListTag listTag;
+    private final String pattern;
+    private final int length;
+    private final String description;
+    private final Integer priority;
+    private final ListTag listTag;
     protected final Plugin plugin;
-    protected final Map<String, Long> attached = new HashMap<String, Long>();
+    private final Map<String, Long> attached = new HashMap<>();
 
     public Tag(final ConfigurationSection config, final ListTag listTag, final Plugin plugin) {
         this.pattern = config.getString("pattern");
@@ -56,21 +56,21 @@ public abstract class Tag implements Comparable<Tag> {
         this.plugin = plugin;
     }
 
-    public void attach(final Player player) {
+    protected void attach(final Player player) {
         this.attach(player, System.currentTimeMillis());
     }
 
-    public void attach(final Player player, final long attached) {
+    protected void attach(final Player player, final long attached) {
         this.attached.put(player.getName(), attached);
         this.listTag.attach(this, player);
     }
 
-    public void detach(final Player player) {
+    protected void detach(final Player player) {
         this.attached.remove(player.getName());
         this.listTag.detach(this, player);
     }
 
-    public final void unload() {
+    final void unload() {
         this.onUnload();
         this.attached.clear();
     }
@@ -82,17 +82,18 @@ public abstract class Tag implements Comparable<Tag> {
         return ( o == null ? -1 : this.priority.compareTo(o.priority) );
     }
 
-    public String getPlayerListName(final Player player) {
-        final String name = player.getName().substring(0, Math.min(player.getName().length(), Tag.LIST_NAME_LENGTH - this.length));
+    String getPlayerListName(final Player player) {
+    	String prefix = new Prefix(player).getPrefix();
+        final String name = prefix + player.getName()/*.substring(0, Math.min(player.getName().length(), Tag.LIST_NAME_LENGTH - this.length))*/;
         return MessageFormat.format(this.pattern, name);
     }
 
-    public String getDisplayName(final Player player) {
-        return MessageFormat.format(this.pattern, player.getDisplayName());
+    String getDisplayName(final Object player) {
+        return MessageFormat.format(this.pattern, ((Player) player).getDisplayName());
     }
 
-    public final String describe(final Player player) {
-        final List<Object> arguments = new ArrayList<Object>();
+    final String describe(final Player player) {
+        final List<Object> arguments = new ArrayList<>();
         if (!this.attached.containsKey(player.getName())) return null;
         final Long attached = System.currentTimeMillis() - this.attached.get(player.getName());
         final String duration = ( attached != null ? Main.readableDuration(attached) : null );

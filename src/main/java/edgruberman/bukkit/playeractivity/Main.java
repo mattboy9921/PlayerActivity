@@ -2,7 +2,9 @@ package edgruberman.bukkit.playeractivity;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,15 +23,18 @@ import edgruberman.bukkit.playeractivity.consumers.away.AwayBack;
 import edgruberman.bukkit.playeractivity.consumers.listtag.ListTag;
 import edgruberman.bukkit.playeractivity.messaging.Courier.ConfigurationCourier;
 import edgruberman.bukkit.playeractivity.util.CustomPlugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 public final class Main extends CustomPlugin {
 
-    public IdleNotify idleNotify = null;
-    public IdleKick idleKick = null;
-    public AwayBack awayBack = null;
-    public ListTag listTag = null;
+    private IdleNotify idleNotify = null;
+    private IdleKick idleKick = null;
+    private AwayBack awayBack = null;
+    private ListTag listTag = null;
 
     private ConfigurationCourier courier;
+    public static Chat chat = null;
+    private static final Logger log = Logger.getLogger("Minecraft");
 
     @Override
     public void onLoad() {
@@ -78,6 +83,14 @@ public final class Main extends CustomPlugin {
         this.getCommand("who").setExecutor(new Who(this, this.courier, this.listTag, this.getCommand("players")));
         this.getCommand("players").setExecutor(new Players(this.courier, this.listTag));
         this.getCommand("playeractivity.reload").setExecutor(new Reload(this, this.courier));
+
+        // Check for Vault
+        if (!hasVault()) {
+            log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        setupChat();
     }
 
     @Override
@@ -91,6 +104,8 @@ public final class Main extends CustomPlugin {
         Bukkit.getScheduler().cancelTasks(this);
 
         this.courier = null;
+
+        log.info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
     }
 
     @Override
@@ -127,6 +142,15 @@ public final class Main extends CustomPlugin {
         if (minutes > 0) sb.append((sb.length() > 0) ? " " : "").append(Long.toString(minutes)).append("m");
         if (seconds > 0) sb.append((sb.length() > 0) ? " " : "").append(Long.toString(seconds)).append("s");
         return sb.toString();
+    }
+
+    private boolean hasVault() {
+        return getServer().getPluginManager().getPlugin("Vault") != null;
+    }
+
+    private void setupChat() {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
     }
 
 }

@@ -23,8 +23,8 @@ public class ListTag implements Listener {
     private static final SortedSet<Tag> EMTPY_TAG_SORTED_SET = Collections.unmodifiableSortedSet(new TreeSet<Tag>());
 
     private final String track;
-    private final List<Tag> tags = new ArrayList<Tag>();
-    private final Map<String, TreeSet<Tag>> attached = new HashMap<String, TreeSet<Tag>>();
+    private final List<Tag> tags = new ArrayList<>();
+    private final Map<String, TreeSet<Tag>> attached = new HashMap<>();
 
     public ListTag(final Plugin plugin, final ConfigurationSection tags, final String track) {
         this.track = track;
@@ -51,7 +51,7 @@ public class ListTag implements Listener {
         this.clear(quit.getPlayer());
     }
 
-    public void register(final Tag tag) {
+    private void register(final Tag tag) {
         this.tags.add(tag);
     }
 
@@ -59,15 +59,15 @@ public class ListTag implements Listener {
         this.tags.remove(tag);
     }
 
-    public void attach(final Tag tag, final Player player) {
+    void attach(final Tag tag, final Player player) {
         if (!player.hasPermission(this.track)) return;
-        if (!this.attached.containsKey(player.getName())) this.attached.put(player.getName(), new TreeSet<Tag>());
+        if (!this.attached.containsKey(player.getName())) this.attached.put(player.getName(), new TreeSet<>());
         final TreeSet<Tag> tags = this.attached.get(player.getName());
         if (!tags.add(tag)) return;
         this.updateListName(player);
     }
 
-    public void detach(final Tag tag, final Player player) {
+    void detach(final Tag tag, final Player player) {
         if (!player.hasPermission(this.track)) return;
         final TreeSet<Tag> tags = this.attached.get(player.getName());
         if (tags == null || !tags.remove(tag)) return;
@@ -77,7 +77,7 @@ public class ListTag implements Listener {
 
     public void clear(final Player player) {
         if (player == null || !this.attached.containsKey(player.getName())) return;
-        final TreeSet<Tag> tags = new TreeSet<Tag>(this.attached.get(player.getName()));
+        final TreeSet<Tag> tags = new TreeSet<>(this.attached.get(player.getName()));
         for (final Tag tag : tags) tag.detach(player);
     }
 
@@ -91,12 +91,13 @@ public class ListTag implements Listener {
         HandlerList.unregisterAll(this);
     }
 
-    public void resetListName(final Player player) {
+    private void resetListName(final Player player) {
         if (!player.isOnline()) return;
-        player.setPlayerListName(player.getName());
+        String prefix = new Prefix(player).getPrefix();
+        player.setPlayerListName(prefix + player.getName());
     }
 
-    public void updateListName(final Player player) {
+    private void updateListName(final Player player) {
         if (!player.isOnline()) return;
         final TreeSet<Tag> tags = this.attached.get(player.getName());
         if (tags != null) {
@@ -106,9 +107,9 @@ public class ListTag implements Listener {
         }
     }
 
-    public String getTagDisplayName(final Player player) {
-        final TreeSet<Tag> tags = this.attached.get(player.getName());
-        if (tags == null) return player.getDisplayName();
+    public String getTagDisplayName(final Object player) {
+        final TreeSet<Tag> tags = this.attached.get(Bukkit.getName());
+        if (tags == null) return ((Player) player).getDisplayName();
         return tags.first().getDisplayName(player);
     }
 
