@@ -39,4 +39,4 @@ away-back:
     - PlayerBedEnterEvent
     - PlayerManualBedLeaveEvent
     - PlayerBack
-version: @VERSION@
+version: ${project.version}

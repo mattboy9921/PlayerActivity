@@ -29,4 +29,4 @@ command-disabled: '§f-> §7Command §cdisabled§8: §7 §o{1}' # 0 = generated,
 player-not-found: '§f-> §7Player §enot found§8: §7 §o{1}' # 0 = generated, 1 = player
 reload: '§f-> §2Reloaded §7{1} plugin' # 0 = generated, 1 = plugin name
 requires-player: '§f-> §cOnly in-game players§7 can use the §b/{1} §7command' # 0 = generated, 1 = command label
-version: @VERSION@
+version: ${project.version}
