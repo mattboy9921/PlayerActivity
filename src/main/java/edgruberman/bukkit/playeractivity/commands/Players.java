@@ -1,9 +1,6 @@
 package edgruberman.bukkit.playeractivity.commands;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -27,7 +24,7 @@ public final class Players implements CommandExecutor {
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-        final List<Player> sorted = Arrays.asList(sender.getServer().getOnlinePlayers());
+        final List<Player> sorted = new ArrayList<>( sender.getServer().getOnlinePlayers() );
         Collections.sort(sorted, new ColorStrippedDisplayNameComparator());
 
         final JoinList<String> list = JoinList.<String>factory()
