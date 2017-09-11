@@ -18,12 +18,12 @@ public abstract class Tag implements Comparable<Tag> {
     //private static final int LIST_NAME_LENGTH = 16;
     private static final String TAGS_PACKAGE = Tag.class.getPackage().getName() + ".tags";
 
-    public static Tag create(final String className, final ConfigurationSection config, final ListTag listTag, final Plugin plugin)
+    public static Tag create(final String className, final ConfigurationSection config, final ListTag listTag, final Main plugin)
             throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException
                 , InvocationTargetException, NoSuchMethodException, ClassCastException, ClassNotFoundException {
         return Tag
                 .find(className)
-                .getConstructor(ConfigurationSection.class, ListTag.class, Plugin.class)
+                .getConstructor(ConfigurationSection.class, ListTag.class, Main.class)
                 .newInstance(config, listTag, plugin);
     }
 
@@ -44,10 +44,10 @@ public abstract class Tag implements Comparable<Tag> {
     private final String description;
     private final Integer priority;
     private final ListTag listTag;
-    protected final Plugin plugin;
+    protected final Main plugin;
     private final Map<String, Long> attached = new HashMap<>();
 
-    public Tag(final ConfigurationSection config, final ListTag listTag, final Plugin plugin) {
+    public Tag(final ConfigurationSection config, final ListTag listTag, final Main plugin) {
         this.pattern = config.getString("pattern");
         this.length = MessageFormat.format(this.pattern, "").length();
         this.description = config.getString("description");
@@ -83,7 +83,7 @@ public abstract class Tag implements Comparable<Tag> {
     }
 
     String getPlayerListName(final Player player) {
-    	String prefix = new Prefix(player).getPrefix();
+        String prefix = plugin.vault.isAvailable() ? new Prefix(player).getPrefix() : "&f";
         final String name = prefix + player.getName()/*.substring(0, Math.min(player.getName().length(), Tag.LIST_NAME_LENGTH - this.length))*/;
         return MessageFormat.format(this.pattern, name);
     }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import edgruberman.bukkit.playeractivity.util.VaultIntegration;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -27,13 +28,13 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 public final class Main extends CustomPlugin {
 
+    public VaultIntegration vault;
     private IdleNotify idleNotify = null;
     private IdleKick idleKick = null;
     private AwayBack awayBack = null;
     private ListTag listTag = null;
 
     private ConfigurationCourier courier;
-    public static Chat chat = null;
     private static final Logger log = Logger.getLogger("Minecraft");
 
     @Override
@@ -90,7 +91,13 @@ public final class Main extends CustomPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        setupChat();
+
+        // Check for Vault Chat
+        vault = new VaultIntegration(this);
+        if (vault.isAvailable())
+            vault.setupChat();
+        else
+            log.severe("Vault chat not found, prefix colors disabled.");
     }
 
     @Override
@@ -148,9 +155,5 @@ public final class Main extends CustomPlugin {
         return getServer().getPluginManager().getPlugin("Vault") != null;
     }
 
-    private void setupChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-    }
 
 }

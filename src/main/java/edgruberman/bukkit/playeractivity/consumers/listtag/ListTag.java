@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import edgruberman.bukkit.playeractivity.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -23,11 +24,13 @@ public class ListTag implements Listener {
     private static final SortedSet<Tag> EMTPY_TAG_SORTED_SET = Collections.unmodifiableSortedSet(new TreeSet<Tag>());
 
     private final String track;
+    private final Main plugin;
     private final List<Tag> tags = new ArrayList<>();
     private final Map<String, TreeSet<Tag>> attached = new HashMap<>();
 
-    public ListTag(final Plugin plugin, final ConfigurationSection tags, final String track) {
+    public ListTag(final Main plugin, final ConfigurationSection tags, final String track) {
         this.track = track;
+        this.plugin = plugin;
 
         for (final String key : tags.getKeys(false)) {
             if (!tags.isConfigurationSection(key)) continue;
@@ -92,9 +95,15 @@ public class ListTag implements Listener {
     }
 
     private void resetListName(final Player player) {
+
+        String prefix;
+
         if (!player.isOnline()) return;
-        String prefix = new Prefix(player).getPrefix();
+
+        // Only get prefix if Vault Chat available
+        prefix = plugin.vault.isAvailable() ? new Prefix(player).getPrefix() : "&f";
         player.setPlayerListName(prefix + player.getName());
+
     }
 
     private void updateListName(final Player player) {

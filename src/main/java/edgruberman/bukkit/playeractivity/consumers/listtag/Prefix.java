@@ -3,7 +3,7 @@ package edgruberman.bukkit.playeractivity.consumers.listtag;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import static edgruberman.bukkit.playeractivity.Main.chat;
+import static edgruberman.bukkit.playeractivity.util.VaultIntegration.chat;
 
 class Prefix {
 
