@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edgruberman.bukkit.playeractivity.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public class Away extends Tag implements Listener {
 
     private final Map<String, String> reasons = new HashMap<String, String>();
 
-    public Away(final ConfigurationSection config, final ListTag listTag, final Plugin plugin) {
+    public Away(final ConfigurationSection config, final ListTag listTag, final Main plugin) {
         super(config, listTag, plugin);
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }

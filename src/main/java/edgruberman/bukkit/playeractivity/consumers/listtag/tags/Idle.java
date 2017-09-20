@@ -5,13 +5,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
+import edgruberman.bukkit.playeractivity.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
-import edgruberman.bukkit.playeractivity.IdlePublisher;
-import edgruberman.bukkit.playeractivity.PlayerActive;
-import edgruberman.bukkit.playeractivity.PlayerIdle;
-import edgruberman.bukkit.playeractivity.StatusTracker;
 import edgruberman.bukkit.playeractivity.consumers.listtag.ListTag;
 import edgruberman.bukkit.playeractivity.consumers.listtag.Tag;
 
@@ -19,7 +16,7 @@ public class Idle extends Tag implements Observer {
 
     protected final StatusTracker tracker;
 
-    public Idle(final ConfigurationSection config, final ListTag listTag, final Plugin plugin) {
+    public Idle(final ConfigurationSection config, final ListTag listTag, final Main plugin) {
         super(config, listTag, plugin);
 
         final long idle = TimeUnit.MILLISECONDS.convert(config.getInt("idle"), TimeUnit.SECONDS);

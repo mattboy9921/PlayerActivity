@@ -1,5 +1,6 @@
 package edgruberman.bukkit.playeractivity.consumers.listtag.tags;
 
+import edgruberman.bukkit.playeractivity.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
@@ -15,7 +16,7 @@ import edgruberman.bukkit.playeractivity.consumers.listtag.Tag;
 
 public class Bed extends Tag implements Listener {
 
-    public Bed(final ConfigurationSection config, final ListTag listTag, final Plugin plugin) {
+    public Bed(final ConfigurationSection config, final ListTag listTag, final Main plugin) {
         super(config, listTag, plugin);
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
